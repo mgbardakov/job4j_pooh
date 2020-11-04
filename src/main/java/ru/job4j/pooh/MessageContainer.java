@@ -38,7 +38,7 @@ public class MessageContainer<K, V> {
         }
     }
 
-    public V getMessage (K key) {
+    public V getMessage(K key) {
         return queues.get(key).poll();
     }
 

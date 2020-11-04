@@ -9,7 +9,7 @@ public class QueryHandler {
     private final TopicExchanger<UserConnection, String> exchanger
             = new TopicExchanger<>(MessageContainer.getTopicContainer());
 
-    private <K> String getResponse (K key, MessageContainer<K, String> container) {
+    private <K> String getResponse(K key, MessageContainer<K, String> container) {
         if (container.getQueues().isEmpty()) {
             return EMPTY_QUEUE_RESPONSE;
         }
