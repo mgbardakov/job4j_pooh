@@ -1,4 +1,4 @@
-package ru.job4j.pooh;
+package ru.job4j.pooh.hzhz;
 
 public class HTTPQueryHandler implements QueryHandler {
 

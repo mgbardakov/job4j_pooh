@@ -1,4 +1,4 @@
-package ru.job4j.pooh;
+package ru.job4j.pooh.hzhz;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;

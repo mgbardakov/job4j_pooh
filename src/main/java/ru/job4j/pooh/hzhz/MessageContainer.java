@@ -1,4 +1,4 @@
-package ru.job4j.pooh;
+package ru.job4j.pooh.hzhz;
 
 import java.util.Map;
 import java.util.Queue;
