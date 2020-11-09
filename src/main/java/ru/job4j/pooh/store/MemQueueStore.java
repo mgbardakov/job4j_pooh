@@ -35,10 +35,13 @@ public class MemQueueStore implements QueueStore {
     }
 
     @Override
-    public String getMessage(String key) throws NoSuchKeyException {
+    public String getMessage(String key) {
+        var rsl = "";
         if (!store.containsKey(key)) {
-            throw new NoSuchKeyException();
+            rsl = "NO_SUCH_KEY";
+        } else {
+            rsl = store.get(key).poll();
         }
-        return store.get(key).poll();
+        return rsl;
     }
 }

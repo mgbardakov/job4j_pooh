@@ -1,11 +1,14 @@
 package ru.job4j.pooh;
 
+import ru.job4j.pooh.handlers.Handler;
+import ru.job4j.pooh.handlers.HandlerFactory;
+
 import java.io.*;
 import java.net.Socket;
 
 public class Connection extends Thread {
 
-    private Socket socket;
+    private final Socket socket;
 
     public Connection(Socket socket) {
         this.socket = socket;
@@ -13,7 +16,15 @@ public class Connection extends Thread {
 
     @Override
     public void run() {
-        super.run();
+        try {
+            var query = readQuery();
+            Handler queryHandler = HandlerFactory.getProperHandler(query);
+            var response = queryHandler.getResponse();
+            sendResponse(response);
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private String readQuery() {

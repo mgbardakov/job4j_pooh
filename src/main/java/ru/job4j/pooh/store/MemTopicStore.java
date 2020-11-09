@@ -1,9 +1,11 @@
 package ru.job4j.pooh.store;
 
-import java.util.HashSet;
+import ru.job4j.pooh.exceptions.NoNewMessagesException;
+import ru.job4j.pooh.exceptions.NoSubscribersOnTopicExp;
+import ru.job4j.pooh.exceptions.NoSuchKeyException;
+
 import java.util.Map;
 import java.util.Queue;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -20,21 +22,24 @@ public class MemTopicStore implements TopicStore {
         return MemTopicStore.Holder.INSTANCE;
     }
 
-    private final Map<String, User> store = new ConcurrentHashMap<>();
+    private final Map<String, Map<String, Queue<String>>> store = new ConcurrentHashMap<>();
 
 
     @Override
-    public String getMessage(String userID, String topic) {
-        var rsl = String.format("YOU'VE BEEN SUBSCRIBED TO %s",
-                topic.toUpperCase());
+    public String getMessage(String userID, String topic){
+        var rsl = "";
         if (!store.containsKey(userID)) {
-            addUser(userID);
+            addTopicQueue(userID);
             subscribe(userID, topic);
+            rsl = "NO_SUCH_KEY";
         } else if (store.containsKey(userID)
-                && !store.get(userID).queues.containsKey(topic)) {
+                && !store.get(userID).containsKey(topic)) {
             subscribe(userID, topic);
+            rsl = "NO_SUCH_KEY";
+        } else if (store.get(userID).get(topic).isEmpty()) {
+            rsl = "NO_MESSAGES";
         } else {
-            rsl = store.get(userID).getMessage(topic);
+            rsl = store.get(userID).get(topic).poll();
         }
         return rsl;
     }
@@ -43,9 +48,9 @@ public class MemTopicStore implements TopicStore {
     public boolean broadcastMessage(String topic, String message) {
         var rsl = false;
         for (String id : store.keySet()) {
-            var user = store.get(id);
-            if (user.getTopics().contains(topic)) {
-                user.addMessage(message, topic);
+            var map = store.get(id);
+            if (map.containsKey(topic)) {
+                map.get(topic).offer(message);
                 rsl = true;
             }
         }
@@ -53,34 +58,22 @@ public class MemTopicStore implements TopicStore {
     }
 
     private void subscribe(String userID, String topic) {
-        var user = store.get(userID);
-        user.queues.put(topic, new ConcurrentLinkedQueue<>());
+        var map = store.get(userID);
+        map.put(topic, new ConcurrentLinkedQueue<>());
     }
 
-    private void addUser(String userID) {
-        store.put(userID, new User());
+    private void addTopicQueue(String userID) {
+        store.put(userID, new ConcurrentHashMap<>());
     }
 
-
-    private static class User {
-
-        private final Map<String, Queue<String>> queues;
-
-        public User() {
-            queues = new ConcurrentHashMap<>();
+    private boolean hasTopic(String topic) {
+        var rsl = false;
+        for (String id : store.keySet()) {
+            if (store.get(id).containsKey(topic)) {
+                rsl = true;
+                break;
+            }
         }
-
-        public Set<String> getTopics() {
-            return queues.keySet();
-        }
-
-        public void addMessage(String message, String topic) {
-            queues.get(topic).offer(message);
-        }
-
-        public String getMessage(String topic) {
-            return queues.get(topic).poll();
-        }
-
+        return rsl;
     }
 }

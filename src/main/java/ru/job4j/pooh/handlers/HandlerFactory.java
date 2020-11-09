@@ -5,8 +5,8 @@ import ru.job4j.pooh.parser.Parser;
 import ru.job4j.pooh.parser.SimpleParser;
 
 public class HandlerFactory {
-    public Handler GetProperHandler(String query) throws UnsupportedOperationException {
-        Handler rslHandler = null;
+    public static Handler getProperHandler(String query) throws UnsupportedOperationException {
+        Handler rslHandler;
         Parser parser = new SimpleParser(query);
         Parser fixedParser = parser;
         var fixedQuery = query;

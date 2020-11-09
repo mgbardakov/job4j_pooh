@@ -29,9 +29,13 @@ public class QueueHandler implements Handler {
     }
 
     private String doGet() {
+        var queueTitle = parser.getTitle();
+        var msg = store.getMessage(queueTitle);
+        if (msg.equals("NO_SUCH_TEMPLATE")) {
+
+        }
         try {
-            var queueTitle = parser.getTitle();
-            var message = store.getMessage(queueTitle);
+
             return String.format(OK_GET_TMPL, message);
         } catch (NoSuchKeyException e) {
             return ERROR_GET_TMPL;
