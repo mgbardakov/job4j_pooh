@@ -1,9 +1,5 @@
 package ru.job4j.pooh.store;
 
-import ru.job4j.pooh.exceptions.NoNewMessagesException;
-import ru.job4j.pooh.exceptions.NoSubscribersOnTopicExp;
-import ru.job4j.pooh.exceptions.NoSuchKeyException;
-
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,7 +22,7 @@ public class MemTopicStore implements TopicStore {
 
 
     @Override
-    public String getMessage(String userID, String topic){
+    public String getMessage(String userID, String topic) {
         var rsl = "";
         if (!store.containsKey(userID)) {
             addTopicQueue(userID);

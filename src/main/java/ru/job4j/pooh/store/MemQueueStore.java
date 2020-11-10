@@ -1,7 +1,5 @@
 package ru.job4j.pooh.store;
 
-import ru.job4j.pooh.exceptions.NoSuchKeyException;
-
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,6 +37,8 @@ public class MemQueueStore implements QueueStore {
         var rsl = "";
         if (!store.containsKey(key)) {
             rsl = "NO_SUCH_KEY";
+        } else if (store.get(key).isEmpty()) {
+            rsl = "QUEUE_IS_EMPTY";
         } else {
             rsl = store.get(key).poll();
         }

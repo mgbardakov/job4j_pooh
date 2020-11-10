@@ -29,7 +29,7 @@ public class Connection extends Thread {
 
     private String readQuery() {
         var queryBuilder = new StringBuilder();
-        try(var in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+        try (var in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
             int read;
             while ((read = in.read()) != -1) {
                 queryBuilder.append((char) read);
@@ -41,7 +41,7 @@ public class Connection extends Thread {
     }
 
     private void sendResponse(String response) {
-        try(var out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()))) {
+        try (var out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()))) {
             response.chars().forEach(x -> {
                 try {
                     out.write(x);
@@ -53,6 +53,4 @@ public class Connection extends Thread {
             e.printStackTrace();
         }
     }
-
-
 }

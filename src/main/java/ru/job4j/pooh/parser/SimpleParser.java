@@ -63,7 +63,7 @@ public class SimpleParser implements Parser {
     }
 
     private Map<String, String> getHeaders() {
-        Map<String,String> rslMap = new HashMap<>();
+        Map<String, String> rslMap = new HashMap<>();
         var lines = LINE_DELIMITER.split(query);
         for (int i = 1; i < lines.length - 3; i++) {
             var array = HTTP_HEADER_DELIMITER.split(lines[i]);

@@ -1,8 +1,5 @@
 package ru.job4j.pooh.handlers;
 
-import ru.job4j.pooh.exceptions.NoNewMessagesException;
-import ru.job4j.pooh.exceptions.NoSubscribersOnTopicExp;
-import ru.job4j.pooh.exceptions.NoSuchKeyException;
 import ru.job4j.pooh.parser.Parser;
 import ru.job4j.pooh.store.MemTopicStore;
 import ru.job4j.pooh.store.TopicStore;
@@ -49,14 +46,14 @@ public class TopicHandler implements Handler {
                 break;
             default :
                 rsl = String.format(OK_GET_TMPL, parser.getUserID(),
-                        parser.getMessage());
+                        message);
         }
         return rsl;
     }
 
     private String doPost() {
         var rsl = "";
-        if (store.broadcastMessage(parser.getTitle(), parser.getMessage())){
+        if (store.broadcastMessage(parser.getTitle(), parser.getMessage())) {
             rsl = String.format(OK_POST_TMPL, parser.getUserID());
         } else {
             rsl = String.format(ERROR_POST_TMPL, parser.getTitle(), parser.getUserID());
