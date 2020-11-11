@@ -14,8 +14,8 @@ public class Server extends Thread {
     public void run() {
         while(!isInterrupted()) {
             try(ServerSocket serverSocket = new ServerSocket(1234)) {
-                var socket = serverSocket.accept();
-                new Connection(socket).start();
+                var stringSocket = new StringSocket(serverSocket.accept());
+                new Connection(stringSocket).start();
             } catch (IOException e) {
                 e.printStackTrace();
             }
