@@ -1,11 +1,12 @@
-package ru.job4j.pooh;
+package ru.job4j.pooh.client;
+
+import ru.job4j.pooh.StringSocket;
 
 import java.net.InetAddress;
 import java.net.Socket;
 
-public class Client {
-    private String id;
-
+public class SocketClient implements Client  {
+    @Override
     public String doRequest(String query) {
         var rsl = "";
         try (StringSocket stringSocket = new StringSocket
